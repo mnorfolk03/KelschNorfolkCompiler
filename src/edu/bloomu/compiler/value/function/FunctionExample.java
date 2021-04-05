@@ -1,5 +1,7 @@
 package edu.bloomu.compiler.value.function;
 
+import edu.bloomu.compiler.value.Int;
+
 /**
  * @author Maxwell Norfolk
  */
@@ -48,9 +50,9 @@ public class FunctionExample {
         });
 
         BuiltinFunction prints = new BuiltinFunction((p) -> {
-            Integer[] arr = (Integer[]) p[0].asArray();
-            for (int i : arr) {
-                System.out.print((char) i);
+            Int[] arr = (Int[]) p[0].asArray();
+            for (Int i : arr) {
+                System.out.print((char) i.asInt());
             }
         });
     }

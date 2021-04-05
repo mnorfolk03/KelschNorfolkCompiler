@@ -13,6 +13,10 @@ public class Array implements Value {
 
     Value[] value;
 
+    public Array() {
+        this(new Value[0]);
+    }
+
     public Array(Value[] value) {
         this.value = value;
     }
