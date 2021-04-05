@@ -22,7 +22,9 @@ public interface Value {
      * Converts the object to an array, or throws an exception if the object cannot
      * be converted to an array
      */
-    Object[] asArray() throws DataConversionException;
+    default Value[] asArray() throws DataConversionException {
+        return new Value[]{this};
+    }
 
 
     /**
@@ -35,4 +37,9 @@ public interface Value {
      * Sets the value to a different value
      */
     void set(Object newVal);
+
+    /**
+     * Creates a copy of the value
+     */
+    Value copy();
 }

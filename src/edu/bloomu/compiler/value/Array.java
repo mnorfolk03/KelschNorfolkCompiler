@@ -11,7 +11,11 @@ import java.util.Arrays;
  */
 public class Array implements Value {
 
-    Object[] value;
+    Value[] value;
+
+    public Array(Value[] value) {
+        this.value = value;
+    }
 
     @Override
     public Datatype getType() {
@@ -22,7 +26,7 @@ public class Array implements Value {
     public int asInt() throws DataConversionException {
         try {
             if (value.length == 1)
-                return (int) value[0];
+                return value[0].asInt();
         } catch (ClassCastException exc) {
             throw new DataConversionException("Cannot express '"
                     + value[0] + "' as int!", exc);
@@ -31,7 +35,7 @@ public class Array implements Value {
     }
 
     @Override
-    public Object[] asArray() throws DataConversionException {
+    public Value[] asArray() throws DataConversionException {
         return value;
     }
 
@@ -43,7 +47,23 @@ public class Array implements Value {
 
     @Override
     public void set(Object newVal) {
-        this.value = (Object[]) newVal;
+        this.value = (Value[]) newVal;
+    }
+
+    @Override
+    public Array copy() {
+        Value[] arr2 = new Value[size()];
+        for (int i = 0; i < value.length; i++) {
+            arr2[i] = value[i].copy();
+        }
+        return new Array(arr2);
+    }
+
+    /**
+     * Returns the number of elements in the array
+     */
+    public int size() {
+        return value.length;
     }
 
     @Override

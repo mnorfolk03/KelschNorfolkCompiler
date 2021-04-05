@@ -27,13 +27,13 @@ public abstract class Function implements Value {
     }
 
     @Override
-    public Object[] asArray() throws DataConversionException {
-        throw new DataConversionException("Cannot convert function to array");
+    public Function asFunction() throws DataConversionException {
+        return this;
     }
 
     @Override
-    public Function asFunction() throws DataConversionException {
-        return this;
+    public Function copy() {
+        return this; // TODO ???
     }
 
     @Override

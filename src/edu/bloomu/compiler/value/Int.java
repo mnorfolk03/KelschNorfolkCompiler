@@ -12,6 +12,14 @@ public class Int implements Value {
 
     private int value;
 
+    public Int() {
+        this.value = 0;
+    }
+
+    public Int(int value) {
+        this.value = value;
+    }
+
     @Override
     public Datatype getType() {
         return Datatype.INT;
@@ -23,13 +31,13 @@ public class Int implements Value {
     }
 
     @Override
-    public Object[] asArray() {
-        return new Object[]{value};
+    public Function asFunction() throws DataConversionException {
+        throw new DataConversionException("Cannot convert Int '" + value + "' to Function");
     }
 
     @Override
-    public Function asFunction() throws DataConversionException {
-        throw new DataConversionException("Cannot convert Int '" + value + "' to Function");
+    public Int copy() {
+        return new Int(this.value);
     }
 
     @Override
