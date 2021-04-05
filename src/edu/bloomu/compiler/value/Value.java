@@ -39,6 +39,11 @@ public interface Value {
     void set(Object newVal);
 
     /**
+     * Sets the value to a different value
+     */
+    void set(Value newVal) throws DataConversionException;
+
+    /**
      * Creates a copy of the value
      */
     Value copy();

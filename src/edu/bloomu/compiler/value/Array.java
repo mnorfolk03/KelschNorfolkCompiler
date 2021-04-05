@@ -55,6 +55,11 @@ public class Array implements Value {
     }
 
     @Override
+    public void set(Value newVal) throws DataConversionException {
+        this.value = newVal.asArray();
+    }
+
+    @Override
     public Array copy() {
         Value[] arr2 = new Value[size()];
         for (int i = 0; i < value.length; i++) {

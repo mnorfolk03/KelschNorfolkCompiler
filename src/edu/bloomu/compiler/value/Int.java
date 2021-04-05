@@ -46,6 +46,11 @@ public class Int implements Value {
     }
 
     @Override
+    public void set(Value newVal) throws DataConversionException {
+        this.value = newVal.asInt();
+    }
+
+    @Override
     public String toString() {
         return "" + value;
     }

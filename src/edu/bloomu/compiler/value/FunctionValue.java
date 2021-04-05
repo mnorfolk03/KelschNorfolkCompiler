@@ -10,7 +10,7 @@ import edu.bloomu.compiler.value.function.Function;
  */
 public class FunctionValue implements Value {
 
-    private Function code;
+    private Function value;
 
 
     public FunctionValue() {
@@ -18,22 +18,27 @@ public class FunctionValue implements Value {
     }
 
     public FunctionValue(Function wrapped) {
-        this.code = wrapped;
+        this.value = wrapped;
     }
 
 
     public void callOn(Value... params) {
-        code.callOn(params);
+        value.callOn(params);
     }
 
     @Override
     public void set(Object newVal) {
-        set(newVal); // TODO FIX THIS
+        // TODO setup this up
+    }
+
+    @Override
+    public void set(Value newVal) throws DataConversionException {
+        this.value = newVal.asFunction();
     }
 
     @Override
     public FunctionValue copy() {
-        return new FunctionValue(code);
+        return new FunctionValue(value);
     }
 
     @Override
@@ -48,6 +53,6 @@ public class FunctionValue implements Value {
 
     @Override
     public Function asFunction() throws DataConversionException {
-        return code;
+        return value;
     }
 }
