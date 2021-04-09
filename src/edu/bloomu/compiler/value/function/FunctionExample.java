@@ -56,7 +56,8 @@ public class FunctionExample {
             }
         });
 
-        BuiltinFunction declare = new BuiltinFunction((p) -> {
+        BuiltinFunction length = new BuiltinFunction((p) -> {
+            p[0].set(p[1].asArray().length);
         });
     }
 }
