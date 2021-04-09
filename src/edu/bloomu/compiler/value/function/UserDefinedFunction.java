@@ -17,7 +17,7 @@ public class UserDefinedFunction extends Function {
     @Override
     public void callOn(Value... params) {
         for (Instruction instruction : body) {
-
+            instruction.call();
         }
     }
 }

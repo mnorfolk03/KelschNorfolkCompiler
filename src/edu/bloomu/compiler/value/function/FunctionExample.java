@@ -55,5 +55,8 @@ public class FunctionExample {
                 System.out.print((char) i.asInt());
             }
         });
+
+        BuiltinFunction declare = new BuiltinFunction((p) -> {
+        });
     }
 }

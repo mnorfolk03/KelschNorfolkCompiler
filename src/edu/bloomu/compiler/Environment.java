@@ -1,10 +1,7 @@
 package edu.bloomu.compiler;
 
-import edu.bloomu.compiler.value.Array;
-import edu.bloomu.compiler.value.Datatype;
-import edu.bloomu.compiler.value.Int;
-import edu.bloomu.compiler.value.Value;
-import edu.bloomu.compiler.value.FunctionValue;
+import edu.bloomu.compiler.value.*;
+import edu.bloomu.compiler.value.function.BuiltinFunction;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -47,5 +44,14 @@ public class Environment {
             throw new VariableNotDeclaredException("The variable: '"
                     + key + "' could be found", npe);
         }
+    }
+
+    /**
+     * An interface used to for functions that rely on and modify the environment
+     */
+    public interface EnvironmentFunctionCode extends BuiltinFunction.BuiltinCode {
+
+        @Override
+        void run(Value... values);
     }
 }

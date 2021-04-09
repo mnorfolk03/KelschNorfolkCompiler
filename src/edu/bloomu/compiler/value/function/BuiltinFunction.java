@@ -27,7 +27,7 @@ public class BuiltinFunction extends Function {
     /**
      * An interface used to provide code to the function class
      */
-    interface BuiltinCode {
+    public interface BuiltinCode {
 
         /**
          * The code defined by the user
