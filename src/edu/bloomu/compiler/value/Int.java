@@ -10,10 +10,12 @@ import edu.bloomu.compiler.value.function.Function;
  */
 public class Int implements Value {
 
+    public static final int DEFAULT_VALUE = 0;
+
     private int value;
 
     public Int() {
-        this.value = 0;
+        this.value = DEFAULT_VALUE;
     }
 
     public Int(int value) {
@@ -48,6 +50,11 @@ public class Int implements Value {
     @Override
     public void set(Value newVal) throws DataConversionException {
         this.value = newVal.asInt();
+    }
+
+    @Override
+    public void reset() {
+        this.value = DEFAULT_VALUE;
     }
 
     @Override

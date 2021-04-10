@@ -47,4 +47,9 @@ public interface Value {
      * Creates a copy of the value
      */
     Value copy();
+
+    /**
+     * Sets to the default value
+     */
+    void reset();
 }

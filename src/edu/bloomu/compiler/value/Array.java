@@ -11,10 +11,12 @@ import java.util.Arrays;
  */
 public class Array implements Value {
 
-    Value[] value;
+    public static final Value[] DEFAULT_VALUE = new Value[0];
+
+    private Value[] value;
 
     public Array() {
-        this(new Value[0]);
+        this(DEFAULT_VALUE);
     }
 
     public Array(Value[] value) {
@@ -73,6 +75,11 @@ public class Array implements Value {
      */
     public int size() {
         return value.length;
+    }
+
+    @Override
+    public void reset() {
+        this.value = DEFAULT_VALUE;
     }
 
     @Override

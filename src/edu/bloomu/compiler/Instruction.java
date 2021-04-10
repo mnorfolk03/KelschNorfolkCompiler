@@ -1,6 +1,7 @@
 package edu.bloomu.compiler;
 
 
+import edu.bloomu.compiler.value.Int;
 import edu.bloomu.compiler.value.Value;
 import edu.bloomu.compiler.value.function.Function;
 
@@ -31,7 +32,10 @@ public class Instruction {
         Function func = (Function) host.find(this.func);
         Value[] vParams = new Value[params.length];
         for (int i = 0; i < params.length; i++) {
-            vParams[i] = host.find(params[i]);
+            if (params[i].charAt(0) == '#')
+                vParams[i] = new Int(Integer.parseInt(params[i].substring(1)));
+            else
+                vParams[i] = host.find(params[i]);
         }
 
         func.callOn(vParams);

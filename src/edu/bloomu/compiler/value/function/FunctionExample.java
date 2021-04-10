@@ -2,6 +2,9 @@ package edu.bloomu.compiler.value.function;
 
 import edu.bloomu.compiler.value.Int;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * @author Maxwell Norfolk
  */
@@ -59,5 +62,23 @@ public class FunctionExample {
         BuiltinFunction length = new BuiltinFunction((p) -> {
             p[0].set(p[1].asArray().length);
         });
+
+        // variable stuff
+        BuiltinFunction copy = new BuiltinFunction((p) -> {
+            p[0].set(p[1].copy());
+        });
+
+        BuiltinFunction point = new BuiltinFunction((p) -> {
+            p[0].set(p[1]);
+        });
+
+
+        List<String[]> arr = Arrays.asList("func add x1 int x2 int a3 array".split(" "),
+                "func sum x3 int f1 func".split(" "),
+                "int X3 HONEY test".split(" "),
+                "end".split(" "),
+                "end".split(" "));
+
+        UserDefinedFunction.parse(null, arr);
     }
 }
