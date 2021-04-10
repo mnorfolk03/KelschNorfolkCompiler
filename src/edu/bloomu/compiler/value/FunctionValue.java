@@ -24,6 +24,7 @@ public class FunctionValue implements Value {
 
     public FunctionValue(Function wrapped) {
         this.value = wrapped;
+        resetable = false;
     }
 
 
