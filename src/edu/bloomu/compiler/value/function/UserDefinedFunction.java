@@ -85,7 +85,11 @@ public class UserDefinedFunction extends Function {
                             endCounter++;
                         else if (innerLine[0].equals("end"))
                             endCounter--;
+                        innerFunctionLines.add(innerLine);
                     }
+
+                    innerFunctionLines.remove(innerFunctionLines.size() - 1);
+
 
                     // save inner function into the maps
                     innerFuncs.put(line[1],
@@ -108,7 +112,6 @@ public class UserDefinedFunction extends Function {
         for (Map.Entry<String, Function> entry : innerFuncs.entrySet()) {
             host.find(entry.getKey()).set(entry.getValue());
         }
-
         return new UserDefinedFunction(host, funcBody, params.toArray(new String[]{}));
     }
 

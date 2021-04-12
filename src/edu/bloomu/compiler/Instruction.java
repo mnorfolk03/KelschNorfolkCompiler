@@ -29,7 +29,7 @@ public class Instruction {
     private String[] params;
 
     public void call() {
-        Function func = (Function) host.find(this.func);
+        Function func = host.find(this.func).asFunction();
         Value[] vParams = new Value[params.length];
         for (int i = 0; i < params.length; i++) {
             if (params[i].charAt(0) == '#')

@@ -27,14 +27,13 @@ public class FunctionValue implements Value {
         resetable = false;
     }
 
-
     public void callOn(Value... params) {
         value.callOn(params);
     }
 
     @Override
     public void set(Object newVal) {
-        if (value != null)
+        if (value == null)
             value = (Function) newVal;
         else
             throw new IllegalArgumentException("This function has already been set");

@@ -1,0 +1,19 @@
+int x1 x2 x3
+
+// x1 = 5, x2 = 7
+copy x1 #5
+copy x2 #7
+
+array output
+
+// create a new array of size 20, and fill with 0's
+newSize output #20 #0
+
+add x3 x1 x2
+
+// "x1 + x2 = "
+fill output #120 #49 #32 #43 #32 #120 #50 #32 #61 #32
+
+prints output
+// print x3, as it is a number and cannot be converted to a character
+print x3

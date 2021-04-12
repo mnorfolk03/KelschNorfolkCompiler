@@ -1,5 +1,8 @@
 package edu.bloomu.compiler;
 
+import edu.bloomu.compiler.value.function.HostEnvironmentSetup;
+import edu.bloomu.compiler.value.function.UserDefinedFunction;
+
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.File;
@@ -11,11 +14,13 @@ import java.util.Scanner;
  * Prompts the user with a file navigator window. The user should find a text file
  * containing code for a program in this language. The program in this file will be
  * tokenized.
+ * <p>
+ * Version 2 created for file safety reasons
  *
  * @author Schyler Kelsch
  * @author Maxwell Norfolk
  */
-public class Compiler {
+public class Compiler2 {
     public static void main(String[] args) {
         // display file chooser and get selected file
         JFileChooser chooser = new JFileChooser();
@@ -37,8 +42,12 @@ public class Compiler {
             while (input.hasNextLine()) {
                 ArrayList<String> tokens = new ArrayList<>();
                 String instruction = input.nextLine();
+                if (instruction.isEmpty() || instruction.startsWith("//"))
+                    continue;
 
                 Scanner line = new Scanner(instruction);
+
+
 
                 // tokenize line, delimiting by whitespace
                 while (line.hasNext()) {
@@ -50,14 +59,15 @@ public class Compiler {
                 program.add(test);
             }
 
-            // for testing
-            for (int i = 0; i < program.size(); i++) {
-                String[] instructionLine = program.get(i);
-                for (int j = 0; j < instructionLine.length; j++) {
-                    System.out.print("\"" + instructionLine[j] + "\" ");
-                }
-                System.out.println();
-            }
+            program.add(0, new String[0]); // no params
+            Environment builtin = new Environment(null);
+
+            HostEnvironmentSetup.setup(builtin);
+
+            UserDefinedFunction main = UserDefinedFunction.parse(builtin, program);
+            main.callOn();
+
+
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             System.exit(1);

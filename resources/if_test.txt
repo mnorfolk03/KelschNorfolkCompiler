@@ -1,0 +1,32 @@
+
+
+func IF myBool INT
+    func VOID
+    end
+
+    func GOOD
+        array str
+        newSize str #5 #0
+        fill str #103 #111 #111 #100 #10
+        prints str
+    end
+
+    nullfunc callMe
+    array options a2
+
+    newSize options #2 callMe
+    put VOID options #0
+    put GOOD options #1
+
+// turn int to a 0 or a 1
+    or myBool #0 myBool
+
+    at callMe options myBool
+    call callMe
+
+    newSize a2 #3 #0
+    fill a2 #101 #110 #100
+    prints a2
+end
+
+IF #2

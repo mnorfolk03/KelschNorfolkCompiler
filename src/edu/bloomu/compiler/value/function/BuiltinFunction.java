@@ -1,5 +1,6 @@
 package edu.bloomu.compiler.value.function;
 
+import edu.bloomu.compiler.SyntaxException;
 import edu.bloomu.compiler.value.Value;
 
 /**
@@ -21,7 +22,11 @@ public class BuiltinFunction extends Function {
 
     @Override
     public void callOn(Value... params) {
-        code.run(params);
+        try {
+            code.run(params);
+        } catch (IndexOutOfBoundsException e) {
+            throw new SyntaxException("Not enough arguments supplied!", e);
+        }
     }
 
     /**

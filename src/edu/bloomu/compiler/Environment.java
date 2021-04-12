@@ -75,4 +75,9 @@ public class Environment {
         @Override
         void run(Value... values);
     }
+
+    @Override
+    public String toString() {
+        return variables.toString();
+    }
 }
