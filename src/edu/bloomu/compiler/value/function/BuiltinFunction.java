@@ -1,5 +1,6 @@
 package edu.bloomu.compiler.value.function;
 
+import edu.bloomu.compiler.Environment;
 import edu.bloomu.compiler.SyntaxException;
 import edu.bloomu.compiler.value.Value;
 
@@ -21,7 +22,7 @@ public class BuiltinFunction extends Function {
     }
 
     @Override
-    public void callOn(Value... params) {
+    public void callOn(Environment env, Value... params) {
         try {
             code.run(params);
         } catch (IndexOutOfBoundsException e) {

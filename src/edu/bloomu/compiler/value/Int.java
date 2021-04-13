@@ -53,11 +53,6 @@ public class Int implements Value {
     }
 
     @Override
-    public void reset() {
-        this.value = DEFAULT_VALUE;
-    }
-
-    @Override
     public String toString() {
         return "" + value;
     }

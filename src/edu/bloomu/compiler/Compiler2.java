@@ -9,6 +9,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Prompts the user with a file navigator window. The user should find a text file
@@ -23,7 +25,7 @@ import java.util.Scanner;
 public class Compiler2 {
     public static void main(String[] args) {
         // display file chooser and get selected file
-        JFileChooser chooser = new JFileChooser();
+        JFileChooser chooser = new JFileChooser("F:IntelliJProjects/KelschNorfolkCompiler/resources");
         FileNameExtensionFilter filter = new FileNameExtensionFilter(".txt files", "txt");
         chooser.setFileFilter(filter);
         File file;
@@ -38,23 +40,18 @@ public class Compiler2 {
             ArrayList<String[]> program = new ArrayList<>();
             Scanner input = new Scanner(file);
 
-            // read each line of the file as one instruction
             while (input.hasNextLine()) {
                 ArrayList<String> tokens = new ArrayList<>();
                 String instruction = input.nextLine();
                 if (instruction.isEmpty() || instruction.startsWith("//"))
                     continue;
 
-                Scanner line = new Scanner(instruction);
-
-
-
-                // tokenize line, delimiting by whitespace
-                while (line.hasNext()) {
-                    String token = line.next();
-                    tokens.add(token);
+                Matcher m = Pattern.compile("([^\"]\\S*|\".+?\")\\s*").matcher(instruction);
+                while (m.find()) {
+                    String s = m.group(1);
+                    if (!s.equals(" "))
+                        tokens.add(s);
                 }
-
                 String[] test = tokens.toArray(new String[0]);
                 program.add(test);
             }
@@ -64,8 +61,8 @@ public class Compiler2 {
 
             HostEnvironmentSetup.setup(builtin);
 
-            UserDefinedFunction main = UserDefinedFunction.parse(builtin, program);
-            main.callOn();
+            UserDefinedFunction main = UserDefinedFunction.parse(program);
+            main.callOn(builtin);
 
 
         } catch (FileNotFoundException e) {

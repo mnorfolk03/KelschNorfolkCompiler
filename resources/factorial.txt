@@ -1,0 +1,40 @@
+// if(bool, func)
+func IF myBool int myFunc func
+    func VOID
+    end
+    int temp
+    nullfunc callMe
+    array options a2
+
+    newSize options #2 callMe
+    put VOID options #0
+    put myFunc options #1
+
+// turn int to a 0 or a 1
+    or temp #0 myBool
+
+    at callMe options temp
+    callMe
+
+end
+
+
+
+// y = fac(x)
+func FAC x int y int
+    copy y #1
+    func BODY
+        int temp
+        sub temp x #1
+        FAC temp y
+        mul y x y
+    end
+
+    IF x BODY
+end
+
+int myX myY
+
+point myX #8
+FAC myX myY
+print myY

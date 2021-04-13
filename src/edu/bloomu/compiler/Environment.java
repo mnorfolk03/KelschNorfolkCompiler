@@ -16,11 +16,12 @@ public class Environment {
     public Environment(Environment parent) {
         this.parent = parent;
         variables = new HashMap<>();
+        params = new HashMap<>();
     }
 
-    public Environment(Environment parent, Map<String, Datatype> vars) {
-        this.parent = parent;
-        setVariables(vars);
+    public void setParams(Map<String, Datatype> vars) {
+        params = new HashMap<>(vars.size());
+        setVars(vars, params);
     }
 
     /**
@@ -28,26 +29,34 @@ public class Environment {
      */
     public void setVariables(Map<String, Datatype> vars) {
         variables = new HashMap<>(vars.size());
-        for (Map.Entry<String, Datatype> var : vars.entrySet()) {
+        setVars(vars, variables);
+    }
+
+    private void setVars(Map<String, Datatype> datatypes, Map<String, Value> vars) {
+
+        for (Map.Entry<String, Datatype> var : datatypes.entrySet()) {
             switch (var.getValue()) {
                 case INT:
-                    variables.put(var.getKey(), new Int());
+                    vars.put(var.getKey(), new Int());
                     break;
                 case ARRAY:
-                    variables.put(var.getKey(), new Array());
+                    vars.put(var.getKey(), new Array());
                     break;
                 case FUNC:
-                    variables.put(var.getKey(), new FunctionValue());
+                    vars.put(var.getKey(), new FunctionValue());
                     break;
             }
         }
     }
 
     private Environment parent;
+    public Map<String, Value> params;
     private Map<String, Value> variables;
 
     public Value find(String key) {
         try {
+            if (params.containsKey(key))
+                return params.get(key);
             return variables.containsKey(key)
                     ? variables.get(key)  // if can't find in this scope, go up one
                     : parent.find(key);
@@ -58,13 +67,22 @@ public class Environment {
         }
     }
 
+    public void setParam(String key, Value value) {
+        if (params.containsKey(key))
+            params.put(key, value);
+        else throw new IllegalArgumentException("Key '" + key + "' not a valid param!");
+    }
+
     /**
      * Resets all variables in the environment
      */
-    public void reset() {
-        for (Value value : variables.values()) {
-            value.reset();
+    public Environment copy() {
+        Environment copy = new Environment(parent);
+        copy.params = params;
+        for (Map.Entry<String, Value> entry : variables.entrySet()) {
+            copy.variables.put(entry.getKey(), entry.getValue().copy());
         }
+        return copy;
     }
 
     /**

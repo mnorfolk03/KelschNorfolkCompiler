@@ -12,8 +12,6 @@ newSize output #20 #0
 add x3 x1 x2
 
 // "x1 + x2 = "
-fill output #120 #49 #32 #43 #32 #120 #50 #32 #61 #32
+fill output #37 #100 #32 #43 #32 #37 #100 #32 #61 #32 #37 #100
 
-prints output
-// print x3, as it is a number and cannot be converted to a character
-print x3
+printf output x1 x2 x3

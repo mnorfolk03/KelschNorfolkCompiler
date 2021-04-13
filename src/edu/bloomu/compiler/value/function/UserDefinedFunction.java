@@ -15,14 +15,16 @@ import java.util.*;
  */
 public class UserDefinedFunction extends Function {
 
-    private Environment host;
     private List<Instruction> body;
     private String[] paramNames;
+    private Map<String, Datatype> paramsMap;
+    private Map<String, Datatype> varsMap;
+    private Map<String, Function> innerFuncs;
 
-    public static UserDefinedFunction parse(Environment parent, List<String[]> arr) {
+    public static UserDefinedFunction parse(List<String[]> arr) {
 
-        Environment host = new Environment(parent);
-        Map<String, Datatype> vars = new HashMap<>();
+        Map<String, Datatype> varsMap = new HashMap<>();
+        Map<String, Datatype> paramsMap = new HashMap<>();
         Iterator<String[]> it = arr.iterator();
 
         List<String> params = new ArrayList<>();
@@ -38,10 +40,9 @@ public class UserDefinedFunction extends Function {
                     ? Datatype.FUNC
                     : Datatype.valueOf(dataName);
 
-            vars.put(varName, type);
+            paramsMap.put(varName, type);
             params.add(varName);
         }
-
 
         Map<String, Function> innerFuncs = new HashMap<>();
 
@@ -67,7 +68,7 @@ public class UserDefinedFunction extends Function {
 
             if (datatype != null) {
                 for (int i = 1; i < line.length; i++) {
-                    vars.put(line[i], datatype);
+                    varsMap.put(line[i], datatype);
                 }
                 continue;
             }
@@ -93,47 +94,55 @@ public class UserDefinedFunction extends Function {
 
                     // save inner function into the maps
                     innerFuncs.put(line[1],
-                            UserDefinedFunction.parse(host, innerFunctionLines));
-                    vars.put(line[1], Datatype.FUNC);
+                            UserDefinedFunction.parse(innerFunctionLines));
+                    varsMap.put(line[1], Datatype.FUNC);
 
                 } catch (NoSuchElementException nse) { // syntax error
                     throw new SyntaxException("Expected 'end', but could not find. Expected '"
                             + endCounter + "' more 'end's", nse);
                 }
             } else { // ELSE it is a regular function
-                funcBody.add(new Instruction(host, line));
+                funcBody.add(new Instruction(line));
             }
         }
 
-        // set the variables of the environment to the following
-        host.setVariables(vars);
-
-        // define the variables of inner functions
-        for (Map.Entry<String, Function> entry : innerFuncs.entrySet()) {
-            host.find(entry.getKey()).set(entry.getValue());
-        }
-        return new UserDefinedFunction(host, funcBody, params.toArray(new String[]{}));
+        return new UserDefinedFunction(funcBody, params.toArray(new String[]{}),
+                paramsMap, varsMap, innerFuncs);
     }
 
     /**
      * Do not use this to create user defined functions,
-     * instead use {@link #parse(Environment, List)} to create them
+     * instead use {@link #parse(List)} to create them
      */
-    private UserDefinedFunction(Environment host, List<Instruction> body, String[] params) {
-        this.host = host;
+    private UserDefinedFunction(List<Instruction> body, String[] paramNames,
+                                Map<String, Datatype> params, Map<String, Datatype> vars,
+                                Map<String, Function> innerFuncs) {
         this.body = body;
-        this.paramNames = params;
+        this.paramNames = paramNames;
+        this.paramsMap = params;
+        this.varsMap = vars;
+        this.innerFuncs = innerFuncs;
     }
 
     @Override
-    public void callOn(Value... params) {
-        for (int i = 0; i < paramNames.length; i++) {
-            host.find(paramNames[i]).set(params[i]);
+    public void callOn(Environment host, Value... params) {
+        Environment newHost = new Environment(host);
+        newHost.setParams(paramsMap);
+        newHost.setVariables(varsMap);
+
+        // setup functions
+        for (Map.Entry<String, Function> entry : innerFuncs.entrySet()) {
+            newHost.find(entry.getKey()).set(entry.getValue());
         }
 
-        for (Instruction instruction : body) {
-            instruction.call();
+        // setup params
+        for (int i = 0; i < paramNames.length; i++) {
+            newHost.setParam(paramNames[i], params[i]);
         }
-        host.reset();
+
+        // execute instructions
+        for (Instruction instruction : body) {
+            instruction.call(newHost);
+        }
     }
 }

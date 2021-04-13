@@ -1,9 +1,12 @@
 package edu.bloomu.compiler.value.function;
 
 import edu.bloomu.compiler.Environment;
+import edu.bloomu.compiler.value.Array;
 import edu.bloomu.compiler.value.Datatype;
+import edu.bloomu.compiler.value.Int;
 import edu.bloomu.compiler.value.Value;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -57,11 +60,22 @@ public class HostEnvironmentSetup {
             System.out.print(p[0]);
         });
 
-        BuiltinFunction prints = new BuiltinFunction((p) -> {
-
-            for (Value i : p[0].asArray()) {
-                System.out.print((char) i.asInt());
+        BuiltinFunction printf = new BuiltinFunction((p) -> {
+            Value[] valueArr = p[0].asArray();
+            char[] arr = new char[valueArr.length];
+            for (int i = 0; i < valueArr.length; i++) {
+                arr[i] = (char) valueArr[i].asInt();
             }
+            Object[] args = new Object[p.length - 1];
+            for (int i = 1; i < p.length; i++) {
+                if (p[i] instanceof Int)
+                    args[i - 1] = p[i].asInt();
+                else if (p[i] instanceof Array)
+                    args[i - 1] = Arrays.toString(p[i].asArray());
+                else
+                    args[i - 1] = "<unknown func>";
+            }
+            System.out.printf(new String(arr), (Object[]) args);
         });
 
         BuiltinFunction length = new BuiltinFunction((p) -> {
@@ -101,12 +115,6 @@ public class HostEnvironmentSetup {
             p[1].asArray()[p[2].asInt()].set(p[0]);
         });
 
-        BuiltinFunction call = new BuiltinFunction((p) -> {
-            Value[] params = new Value[p.length - 1];
-            System.arraycopy(p, 1, params, 0, p.length - 1);
-            p[0].asFunction().callOn(params);
-        });
-
         Map<String, BuiltinFunction> funcs = new HashMap<>();
         funcs.put("add", add);
         funcs.put("sub", sub);
@@ -117,7 +125,7 @@ public class HostEnvironmentSetup {
         funcs.put("and", and);
         funcs.put("not", not);
         funcs.put("print", print);
-        funcs.put("prints", prints);
+        funcs.put("printf", printf);
         funcs.put("length", length);
         funcs.put("copy", copy);
         funcs.put("point", point);
@@ -125,7 +133,6 @@ public class HostEnvironmentSetup {
         funcs.put("fill", fill);
         funcs.put("at", at);
         funcs.put("put", put);
-        funcs.put("call", call);
 
 
         Map<String, Datatype> datatypes = new HashMap<>();

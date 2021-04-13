@@ -48,8 +48,4 @@ public interface Value {
      */
     Value copy();
 
-    /**
-     * Sets to the default value
-     */
-    void reset();
 }

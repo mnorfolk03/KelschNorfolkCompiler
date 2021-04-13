@@ -78,11 +78,6 @@ public class Array implements Value {
     }
 
     @Override
-    public void reset() {
-        this.value = DEFAULT_VALUE;
-    }
-
-    @Override
     public String toString() {
         return Arrays.toString(value);
     }
