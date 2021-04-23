@@ -12,7 +12,11 @@ import java.util.Map;
  * @author Maxwell Norfolk
  */
 public class Environment {
-
+    
+    private Environment parent;
+    public Map<String, Value> params;
+    private Map<String, Value> variables;
+    
     public Environment(Environment parent) {
         this.parent = parent;
         variables = new HashMap<>();
@@ -49,10 +53,6 @@ public class Environment {
         }
     }
 
-    private Environment parent;
-    public Map<String, Value> params;
-    private Map<String, Value> variables;
-
     public Value find(String key) {
         try {
             if (params.containsKey(key))
@@ -63,7 +63,7 @@ public class Environment {
 
         } catch (NullPointerException npe) { // cannot find
             throw new VariableNotDeclaredException("The variable: '"
-                    + key + "' could be found", npe);
+                    + key + "' could not be found", npe);
         }
     }
 
