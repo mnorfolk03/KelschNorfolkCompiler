@@ -53,7 +53,7 @@ public class Compiler {
                 while (line.find()) {
                     String token = line.group(1);
                     if (!token.equals(" ")) {
-                        tokens.add(token);
+                        tokens.add(token.replaceAll("\\\\n", "\n"));
                     }
                 }
                 program.add(tokens.toArray(new String[0]));

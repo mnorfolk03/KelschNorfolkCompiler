@@ -1,0 +1,74 @@
+// if(bool, func)
+func IF myBool int myFunc func
+    func VOID
+    end
+    int temp
+    nullfunc callMe
+    array options a2
+
+    newSize options #2 callMe
+    put VOID options #0
+    put myFunc options #1
+
+// turn int to a 0 or a 1
+    or temp #0 myBool
+
+    at callMe options temp
+    callMe
+
+end
+
+func CONCAT x1 array x2 array x3 array
+    int concatSize size2 size3
+    length size2 x2
+    length size3 x3
+
+    add concatSize size2 size3
+
+// fill array with 0's
+    newSize x1 concatSize #0
+
+    int newIndex subIndex
+    copy newIndex #0
+    copy subIndex #0
+
+    func COPY_X2
+        int temp char
+
+        at char x2 subIndex
+        put char x1 newIndex
+        add newIndex newIndex #1
+        add subIndex subIndex #1
+
+        sub temp subIndex size2
+        IF temp COPY_X2
+    end
+    COPY_X2
+
+    copy subIndex #0
+    func COPY_X3
+        int temp char
+
+        at char x3 subIndex
+        put char x1 newIndex
+        add newIndex newIndex #1
+        add subIndex subIndex #1
+
+        sub temp subIndex size3
+        IF temp COPY_X3
+    end
+    COPY_X3
+end
+
+array s1 s2 s3
+copy s1 " First String "
+copy s2 " Second String "
+
+CONCAT s3 s1 s2
+printf s3
+printf "\n"
+CONCAT s3 s2 s1
+printf s3
+int temp
+length temp s3
+printf "\nSize: %d" temp
